@@ -12,5 +12,4 @@ class Book
     Rental.new(date, self, person)
     @rentals.push(rental)
   end
-
 end
