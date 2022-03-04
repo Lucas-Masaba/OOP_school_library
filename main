@@ -121,8 +121,7 @@ class App
     end
   end
 
-  def cases
-    answer = gets.chomp.to_i
+  def cases(answer)
 
     case answer
     when 1
@@ -154,7 +153,9 @@ class App
       puts '6 - List all rentals for a given person id'
       puts '7 - Exit'
 
-      cases
+      answer = gets.chomp.to_i
+      cases(answer)
+      break if answer == 7
     end
   end
 end
