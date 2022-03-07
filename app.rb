@@ -7,6 +7,10 @@ class App
     @rentals = []
   end
 
+  def get_user_input
+    gets.chomp
+  end
+
   def list_all_books
     if @books.count.zero?
       puts 'No books added yet'
@@ -25,7 +29,7 @@ class App
 
   def create_person
     puts 'Do you want to create a student (1) or a teacher (2)?'
-    choice = gets.chomp
+    choice = get_user_input
 
     case choice
     when '1'
@@ -41,13 +45,13 @@ class App
 
   def create_student
     print 'Age: '
-    age = gets.chomp
+    age = get_user_input
     print 'Classroom:'
-    classroom = gets.chomp
+    classroom = get_user_input
     print 'Name: '
-    name = gets.chomp
+    name = get_user_input
     print 'Has parent permission? [Y/N]: '
-    permission = gets.chomp
+    permission = get_user_input
     conclusion = ''
     conclusion = permission == 'Y'
 
@@ -57,11 +61,11 @@ class App
 
   def create_teacher
     print 'Age: '
-    age = gets.chomp
+    age = get_user_input
     print 'Specialization:'
-    specialization = gets.chomp
+    specialization = get_user_input
     print 'Name: '
-    name = gets.chomp
+    name = get_user_input
 
     teacher = Teacher.new(age, specialization, name: name)
     @people << teacher
@@ -69,9 +73,9 @@ class App
 
   def create_a_book
     print 'Title: '
-    title = gets.chomp
+    title = get_user_input
     print 'Author: '
-    author = gets.chomp
+    author = get_user_input
 
     new_book = Book.new(title, author)
     @books << new_book
@@ -84,7 +88,7 @@ class App
     else
       puts 'Select a book from the following list by number (not id)'
       @books.each_with_index { |book, index| puts "#{index}) Title: #{book.title}, Author: #{book.author}" }
-      book = gets.chomp.to_i
+      book = get_user_input.to_i
     end
     if @people.length.zero?
       puts 'No People Added Yet'
@@ -93,13 +97,13 @@ class App
       @people.each_with_index do |person, index|
         puts "#{index}) [#{person.class}] Name: #{person.name} ID: #{person.id} Age: #{person.age}"
       end
-      person = gets.chomp.to_i
+      person = get_user_input.to_i
     end
     if @books.length.zero? && @people.length.zero?
       puts 'No books and people :('
     else
       print 'Date: '
-      date = gets.chomp
+      date = get_user_input
 
       new_rental = Rental.new(date, @books[book], @people[person])
       @rentals << new_rental
@@ -109,7 +113,7 @@ class App
 
   def list_persoal_rentals
     print 'ID of person: '
-    id = gets.chomp.to_i
+    id = get_user_input.to_i
     @rentals.select { |rental| rental.person.id == id }.each do |rental|
       puts "Date: #{rental.date}, Book \"#{rental.book.title}\" by #{rental.book.author}"
     end
@@ -147,7 +151,7 @@ class App
       puts '6 - List all rentals for a given person id'
       puts '7 - Exit'
 
-      answer = gets.chomp.to_i
+      answer = get_user_input.to_i
       cases(answer)
       break if answer == 7
     end
