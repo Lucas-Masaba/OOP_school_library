@@ -7,10 +7,6 @@ class App
     @rentals = []
   end
 
-  def await_user_input
-    gets.chomp
-  end
-
   def list_all_books
     if @books.count.zero?
       puts 'No books added yet'
@@ -29,7 +25,7 @@ class App
 
   def create_person
     puts 'Do you want to create a student (1) or a teacher (2)?'
-    choice = await_user_input
+    choice = gets.chomp
 
     case choice
     when '1'
@@ -44,52 +40,72 @@ class App
   end
 
   def create_student
-    print 'Age: '
-    age = await_user_input
-    print 'Classroom:'
-    classroom = await_user_input
-    print 'Name: '
-    name = await_user_input
-    print 'Has parent permission? [Y/N]: '
-    permission = await_user_input
+    age, name = age_and_name
 
-    student = Student.new(age, classroom, name: name, parent_permission: permission == 'Y')
+    clsrom = classroom
+
+    perm = permission
+
+    student = Student.new(age, clsrom, name: name, parent_permission: perm == 'Y')
     @people << student
   end
 
   def create_teacher
-    print 'Age: '
-    age = await_user_input
-    print 'Specialization:'
-    specialization = await_user_input
-    print 'Name: '
-    name = await_user_input
+    age, name = age_and_name
 
-    teacher = Teacher.new(age, specialization, name: name)
+    spec = specialization
+
+    teacher = Teacher.new(age, spec, name: name)
     @people << teacher
   end
 
+  def age_and_name
+    print 'Age:'
+    age = gets.chomp
+    print 'Name: '
+    name = gets.chomp
+    [age, name]
+  end
+
+  def classroom
+    print 'Classroom:'
+    gets.chomp
+  end
+
+  def permission
+    print 'Has parent permission? [Y/N]: '
+    gets.chomp
+  end
+
+  def specialization
+    print 'Specialization:'
+    gets.chomp
+  end
+
   def create_a_book
-    print 'Title: '
-    title = await_user_input
-    print 'Author: '
-    author = await_user_input
+    title, author = title_author
 
     new_book = Book.new(title, author)
     @books << new_book
     puts 'Book created successfully'
   end
 
+  def title_author
+    print 'Title: '
+    title = gets.chomp
+    print 'Author: '
+    author = gets.chomp
+    [title, author]
+  end
+
   def create_a_rental
-    check_books_length
-
-    check_people_length
-
     if @books.length.zero? && @people.length.zero?
       puts 'No books and people :('
     else
+      book = check_books_length
+      person = check_people_length
       print 'Date: '
-      date = await_user_input
+      date = gets.chomp
 
       new_rental = Rental.new(date, @books[book], @people[person])
       @rentals << new_rental
@@ -103,7 +119,7 @@ class App
     else
       puts 'Select a book from the following list by number (not id)'
       @books.each_with_index { |book, index| puts "#{index}) Title: #{book.title}, Author: #{book.author}" }
-      book = await_user_input.to_i
+      book = gets.chomp.to_i
     end
     book
   end
@@ -116,53 +132,16 @@ class App
       @people.each_with_index do |person, index|
         puts "#{index}) [#{person.class}] Name: #{person.name} ID: #{person.id} Age: #{person.age}"
       end
-      person = await_user_input.to_i
+      person = gets.chomp.to_i
     end
     person
   end
 
   def list_persoal_rentals
     print 'ID of person: '
-    id = await_user_input.to_i
+    id = gets.chomp.to_i
     @rentals.select { |rental| rental.person.id == id }.each do |rental|
       puts "Date: #{rental.date}, Book \"#{rental.book.title}\" by #{rental.book.author}"
-    end
-  end
-
-  def cases(answer)
-    case answer
-    when 1
-      list_all_books
-    when 2
-      list_all_people
-    when 3
-      create_person
-    when 4
-      create_a_book
-    when 5
-      create_a_rental
-    when 6
-      list_persoal_rentals
-    else
-      puts 'Thank you for using this app :)'
-    end
-  end
-
-  def run
-    puts 'Welcome to the school library App!'
-    loop do
-      puts 'Please choose an option by entering a number:'
-      puts '1 - List all books'
-      puts '2 - List all people'
-      puts '3 - Create a person'
-      puts '4 - Create a book'
-      puts '5 - Create a rental'
-      puts '6 - List all rentals for a given person id'
-      puts '7 - Exit'
-
-      answer = await_user_input.to_i
-      cases(answer)
-      break if answer == 7
     end
   end
 end
