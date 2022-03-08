@@ -1,16 +1,18 @@
 require './book'
+require './person'
+
 class App
-  attr_reader :books, :people4
+  attr_reader :books, :people
 
   def initialize
     @books = Book.read_books
-    @people = []
+    @people = Person.read_people
     @rentals = []
   end
 
   def save_data
     Book.save_data(@books)
-    File.write('./data/people.json', JSON.generate(@people.to_json))
+    Person.save_data(@people)
     File.write('./data/rentals.json', JSON.generate(@rentals.to_json))
 
   end
