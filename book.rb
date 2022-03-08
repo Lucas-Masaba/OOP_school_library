@@ -33,6 +33,6 @@ class Book
     books.each do |book| 
       books_data << {title: book.title, author: book.author}
     end
-    File.write('./data/books.json', JSON.generate(books_data))
+    File.write(@@path, JSON.generate(books_data))
   end
 end

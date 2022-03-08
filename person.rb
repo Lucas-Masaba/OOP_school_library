@@ -8,8 +8,8 @@ class Person
 
   @@path = './data/people.json'
 
-  def initialize(age, name: 'Unknown', parent_permission: true)
-    @id = Random.rand(1..1000)
+  def initialize(age, name: 'Unknown', parent_permission: true, id: nil)
+    @id = id || Random.rand(1..1000)
     @name = name
     @age = age
     @parent_permission = parent_permission
@@ -40,10 +40,10 @@ class Person
     people_arr = []
     if File.exists?(@@path)
       JSON.parse(File.read(@@path))['students'].each do |obj|
-        people_arr << Student.new(obj['age'], obj['classroom'], name: obj['name'], parent_permission: obj['parent_permission'])
+        people_arr << Student.new(obj['age'], obj['classroom'], name: obj['name'], parent_permission: obj['parent_permission'], id: obj['id'])
       end
       JSON.parse(File.read(@@path))['teachers'].each do |obj|
-        people_arr << Teacher.new(obj['age'], obj['specialization'], name: obj['name'])
+        people_arr << Teacher.new(obj['age'], obj['specialization'], name: obj['name'], id: obj['id'])
       end
     end
     people_arr
@@ -61,6 +61,6 @@ class Person
         people_data[:teachers] << {id: person.id, age: person.age, specialization: person.specialization, name: person.name}
       end
     end
-    File.write('./data/people.json', JSON.generate(people_data))
+    File.write(@@path, JSON.generate(people_data))
   end
 end
