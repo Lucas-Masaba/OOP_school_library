@@ -1,11 +1,20 @@
+require './book'
 class App
-  attr_reader :books, :people
+  attr_reader :books, :people4
 
   def initialize
-    @books = []
+    @books = Book.read_books
     @people = []
     @rentals = []
   end
+
+  def save_data
+    Book.save_data(@books)
+    File.write('./data/people.json', JSON.generate(@people.to_json))
+    File.write('./data/rentals.json', JSON.generate(@rentals.to_json))
+
+  end
+
 
   def list_all_books
     if @books.count.zero?

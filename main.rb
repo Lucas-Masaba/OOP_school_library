@@ -21,6 +21,7 @@ def cases(app, answer)
   when 6
     app.list_persoal_rentals
   else
+    app.save_data
     puts 'Thank you for using this app :)'
   end
 end
