@@ -6,8 +6,6 @@ class Person
   attr_accessor :name, :age
   attr_reader :rentals, :id, :parent_permission
 
-  @@path = './data/people.json'
-
   def initialize(age, name: 'Unknown', parent_permission: true, id: nil)
     @id = id || Random.rand(1..1000)
     @name = name
@@ -35,14 +33,20 @@ class Person
   def can_use_services?
     (@age >= 18 || @parent_permission == true)
   end
-  
+
+  def self.path
+    './data/people.json'
+  end
+
   def self.read_people
     people_arr = []
-    if File.exists?(@@path)
-      JSON.parse(File.read(@@path))['students'].each do |obj|
-        people_arr << Student.new(obj['age'], obj['classroom'], name: obj['name'], parent_permission: obj['parent_permission'], id: obj['id'])
+    if File.exist?(Person.path)
+      JSON.parse(File.read(Person.path))['students'].each do |obj|
+        s = Student.new(obj['age'], obj['classroom'], name: obj['name'], parent_permission: obj['parent_permission'],
+                                                      id: obj['id'])
+        people_arr << s
       end
-      JSON.parse(File.read(@@path))['teachers'].each do |obj|
+      JSON.parse(File.read(Person.path))['teachers'].each do |obj|
         people_arr << Teacher.new(obj['age'], obj['specialization'], name: obj['name'], id: obj['id'])
       end
     end
@@ -55,12 +59,14 @@ class Person
       teachers: []
     }
     people.each do |person|
-      if person.class == Student
-        people_data[:students] << {id: person.id, age: person.age, classroom: person.classroom, name: person.name, parent_permission: person.parent_permission}
+      if person.instance_of?(Student)
+        people_data[:students] << { id: person.id, age: person.age, classroom: person.classroom, name: person.name,
+                                    parent_permission: person.parent_permission }
       else
-        people_data[:teachers] << {id: person.id, age: person.age, specialization: person.specialization, name: person.name}
+        people_data[:teachers] << { id: person.id, age: person.age, specialization: person.specialization,
+                                    name: person.name }
       end
     end
-    File.write(@@path, JSON.generate(people_data))
+    File.write(Person.path, JSON.generate(people_data))
   end
 end

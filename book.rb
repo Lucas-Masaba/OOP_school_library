@@ -5,8 +5,6 @@ class Book
   attr_accessor :title, :author
   attr_reader :rentals
 
-  @@path = './data/books.json'
-
   def initialize(title, author)
     @title = title
     @author = author
@@ -18,10 +16,15 @@ class Book
     @rentals.push(rental)
   end
 
+  def self.path
+    './data/books.json'
+  end
+
   def self.read_books
     books_arr = []
-    if File.exists?(@@path)
-      JSON.parse(File.read(@@path)).each do |obj|
+    puts Book.path
+    if File.exist?(Book.path)
+      JSON.parse(File.read(Book.path)).each do |obj|
         books_arr << Book.new(obj['title'], obj['author'])
       end
     end
@@ -30,9 +33,9 @@ class Book
 
   def self.save_data(books)
     books_data = []
-    books.each do |book| 
-      books_data << {title: book.title, author: book.author}
+    books.each do |book|
+      books_data << { title: book.title, author: book.author }
     end
-    File.write(@@path, JSON.generate(books_data))
+    File.write(Book.path, JSON.generate(books_data))
   end
 end

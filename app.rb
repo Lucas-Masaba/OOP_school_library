@@ -15,9 +15,7 @@ class App
     Book.save_data(@books)
     Person.save_data(@people)
     Rental.save_data(@rentals)
-
   end
-
 
   def list_all_books
     if @books.count.zero?
