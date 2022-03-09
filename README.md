@@ -25,6 +25,23 @@ $ git clone git@github.com:Lucas-Masaba/OOP_school_library.git
 $ ruby main.rb
 ~~~
 
+## Tests
+
+To run the tests, you need to follow these simple steps:
+
+1- Navigate to the project directory using the following command.
+~~~bash
+$ cd OOP_SCHOOL_LIBRARY
+~~~
+2- Install Rspec gem using the following command.
+~~~bash
+$ gem install rspec
+~~~
+3 Finally, to run the tests you need to run the following command.
+~~~bash
+$ rspec
+~~~
+
 
 ## Authors
 
